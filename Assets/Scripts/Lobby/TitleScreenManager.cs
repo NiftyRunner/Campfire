@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,18 +11,27 @@ public class TitleScreenManager : MonoBehaviour
     [SerializeField] private Button playButton;
     [SerializeField] private Button OptionsButton;
     [SerializeField] private Button QuitButton;
+    [SerializeField] private TMP_InputField playerName;
 
+    private LobbyNetworkHandler lobbyNetworkHandler;
     private GameObject menuPanel;
     private GameObject lobbyPanel;
 
-    private void Start()
+    private void Awake()
     {
+        lobbyNetworkHandler = GetComponent<LobbyNetworkHandler>();
+
+
         menuPanel = relationHandler.GetMenuPanel();
         lobbyPanel = relationHandler.GetLobbyPanel();
+    }
 
+    private void Start()
+    {
         //Activates lobby panel
         playButton.onClick.AddListener(() =>
         {
+            lobbyNetworkHandler.SetPlayerNameAndAuthenticate(playerName.text);
             menuPanel.SetActive(false);
             lobbyPanel.SetActive(true);
         });

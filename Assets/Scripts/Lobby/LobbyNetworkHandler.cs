@@ -5,18 +5,21 @@ using UnityEngine;
 public class LobbyNetworkHandler : MonoBehaviour
 {
     private string playerName;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private async void Start()
+    
+    public void SetPlayerNameAndAuthenticate(string _playerName)
     {
-        
-
-        //await AuthenticationService.Instance.
+        playerName = _playerName;
+        Authenticate();
     }
 
-    private async void Authenticate(string _playerName)
+
+    private void Start()
     {
-        this.playerName = _playerName;
+        
+    }
+
+    private async void Authenticate()
+    {
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
 

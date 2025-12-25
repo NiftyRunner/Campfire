@@ -4255,6 +4255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 838103178}
   - component: {fileID: 838103179}
+  - component: {fileID: 838103183}
   - component: {fileID: 838103182}
   - component: {fileID: 838103180}
   - component: {fileID: 838103181}
@@ -4334,8 +4335,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createLobbyButton: {fileID: 2102956706}
+  goToLobbyListButon: {fileID: 1982940776}
   LobbyName: {fileID: 1960743891}
   privacyStatusDropdown: {fileID: 1381048085}
+--- !u!114 &838103183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838103177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b94932563c8e504da9df8c1b0c6d65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createLobbyPanelButton: {fileID: 937774675}
+  refreshLobbyListButton: {fileID: 520107731}
+  goToTitleScreenButton: {fileID: 2109567041}
+  listItemPrefab: {fileID: 7354616799774294781, guid: 677d63380b3af4e4a83560a54efe7fdf, type: 3}
 --- !u!1 &858671803
 GameObject:
   m_ObjectHideFlags: 0
@@ -4543,7 +4561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &936479630
 RectTransform:
   m_ObjectHideFlags: 0

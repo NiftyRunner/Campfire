@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class LobbyPanelRelationHandler : MonoBehaviour
 {
+    public static LobbyPanelRelationHandler Instance { get; private set; }
+
     //Used as a connector for scripts to reference panels
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject lobbyPanel;
@@ -14,7 +16,12 @@ public class LobbyPanelRelationHandler : MonoBehaviour
 
     public GameObject GetLobbyJoinedPanel() => lobbyJoinedPanel;
 
-    public GameObject CreateLobbyPanel() => createLobbyPanel;
+    public GameObject GetCreateLobbyPanel() => createLobbyPanel;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {

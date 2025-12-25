@@ -27,6 +27,12 @@ public class TitleScreenManager : MonoBehaviour
         //Activates lobby panel
         playButton.onClick.AddListener(() =>
         {
+            if (playerName.text == "")
+            {
+                Debug.Log("Player Name cannot be null");
+                return;
+            }
+
             LobbyNetworkHandler.Instance.Authenticate(playerName.text);
             menuPanel.SetActive(false);
             lobbyPanel.SetActive(true);

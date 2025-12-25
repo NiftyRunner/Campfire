@@ -17,7 +17,7 @@ public class LobbyNetworkHandler : MonoBehaviour
     //Event Actions
     public static event Action<Lobby> OnJoinedLobby;
 
-    private string playerName;
+    private string playerName = "";
     private Lobby joinedLobby;
 
     private void Awake()
@@ -25,14 +25,15 @@ public class LobbyNetworkHandler : MonoBehaviour
         Instance = this;
     }
 
-    public async void Authenticate(string _playerName)
+    public async void Authenticate(string _playerName) //Make a single use button for authentication
     {
         playerName = _playerName;
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
 
-        await UnityServices.InitializeAsync(initializationOptions);
 
+        await UnityServices.InitializeAsync(initializationOptions);
+       
         AuthenticationService.Instance.SignedIn += () =>
         {
             

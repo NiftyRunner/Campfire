@@ -6,6 +6,7 @@ public class LobbyPanelRelationHandler : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject lobbyPanel;
     [SerializeField] private GameObject lobbyJoinedPanel;
+    [SerializeField] private GameObject createLobbyPanel;
 
     public GameObject GetMenuPanel() => menuPanel;
 
@@ -13,10 +14,13 @@ public class LobbyPanelRelationHandler : MonoBehaviour
 
     public GameObject GetLobbyJoinedPanel() => lobbyJoinedPanel;
 
+    public GameObject CreateLobbyPanel() => createLobbyPanel;
+
     private void Start()
     {
         menuPanel.SetActive(true);
         lobbyPanel.SetActive(false);
         lobbyJoinedPanel.SetActive(false);
+        createLobbyPanel.SetActive(false);
     }
 }

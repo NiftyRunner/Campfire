@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -16,13 +17,25 @@ public class LobbyNetworkHandler : MonoBehaviour
 
     //Event Actions
     public static event Action<Lobby> OnJoinedLobby;
+    public static event Action<Lobby> OnJoinedLobbyUpdate;
+    public static event Action<Lobby> OnKickedFromLobby;
+    public static event Action OnLeftLobby;
 
     private string playerName = "";
+    private float heartbeatTimer;
+    private float lobbyPollTimer;
+    private float refreshLobbyListTimer = 5f;
     private Lobby joinedLobby;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Update()
+    {
+        HandleLobbyHeartbeat();
+        HandleLobbyPolling();
     }
 
     public async void Authenticate(string _playerName) //Make a single use button for authentication
@@ -69,4 +82,70 @@ public class LobbyNetworkHandler : MonoBehaviour
               });
     }
 
+    public Lobby GetJoinedLobby()
+    {
+        return joinedLobby;
+    }
+
+    //Keeping lobby alive by sending ping every 15 seconds
+    private async void HandleLobbyHeartbeat()
+    {
+        if (IsLobbyHost())
+        {
+            heartbeatTimer -= Time.deltaTime;
+            if(heartbeatTimer <= 0f)
+            {
+                float heartbeatTimerMax = 15f;
+                heartbeatTimer = heartbeatTimerMax;
+                await LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
+            }
+        }
+    }
+
+
+    //Updating lobby every 1.1 second
+    private async void HandleLobbyPolling()
+    {
+        if(joinedLobby != null)
+        {
+            lobbyPollTimer -= Time.deltaTime;
+            if(lobbyPollTimer <= 0f)
+            {
+                float maxLobbyPollTimer = 1.1f;
+                lobbyPollTimer = maxLobbyPollTimer;
+
+                joinedLobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
+
+                OnJoinedLobbyUpdate?.Invoke(joinedLobby);
+
+                if (!IsPlayerInLobby())
+                {
+                    Debug.Log("Kicked from lobby");
+                    OnKickedFromLobby?.Invoke(joinedLobby);
+                    joinedLobby = null;
+                }
+            }
+        }
+    }
+
+    public bool IsLobbyHost()
+    {
+        return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
+    }
+
+    private bool IsPlayerInLobby()
+    {
+        if (joinedLobby != null && joinedLobby.Players != null)
+        {
+            foreach (Player player in joinedLobby.Players)
+            {
+                if (player.Id == AuthenticationService.Instance.PlayerId)
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

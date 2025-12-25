@@ -1,16 +1,122 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI; 
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Authentication;
 
 public class LobbyJoinedUIHandler : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static LobbyJoinedUIHandler Instance { get; private set; }
+
+    [SerializeField] private Button leaveLobbyButton;
+    [SerializeField] private TextMeshProUGUI lobbyName;
+    [SerializeField] private TextMeshProUGUI playerCount;
+    [SerializeField] private TextMeshProUGUI lobbyCode;
+    [SerializeField] private Transform container;
+
+    [SerializeField] private Transform playerInstanceTemplate;
+
+    private GameObject joinedLobbyPanel;
+    private GameObject lobbyListPanel;
+
+    private void Awake()
     {
-        
+        Instance = this;
+
+        playerInstanceTemplate.gameObject.SetActive(false);
+
+        leaveLobbyButton.onClick.AddListener(() =>
+        {
+            LobbyNetworkHandler.Instance.LeaveLobby();
+
+        });
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        LobbyNetworkHandler.OnJoinedLobby += LobbyNetworkHandler_UpdateLobby;
+        LobbyNetworkHandler.OnJoinedLobbyUpdate += LobbyNetworkHandler_UpdateLobby;
+        LobbyNetworkHandler.OnKickedFromLobby += LobbyNetworkHandler_OnKickedFromLobby;
+        LobbyNetworkHandler.OnLeftLobby += LobbyNetworkHandler_OnLeftLobby;
     }
+
+
+    private void OnDisable()
+    {
+        LobbyNetworkHandler.OnJoinedLobby -= LobbyNetworkHandler_UpdateLobby;
+        LobbyNetworkHandler.OnJoinedLobbyUpdate -= LobbyNetworkHandler_UpdateLobby;
+        LobbyNetworkHandler.OnKickedFromLobby -= LobbyNetworkHandler_OnKickedFromLobby;
+        LobbyNetworkHandler.OnLeftLobby -= LobbyNetworkHandler_OnLeftLobby;
+    }
+
+    private void Start()
+    {
+        joinedLobbyPanel = LobbyPanelRelationHandler.Instance.GetLobbyJoinedPanel();
+        lobbyListPanel = LobbyPanelRelationHandler.Instance.GetLobbyPanel();
+        ClearLobby();
+    }
+
+    private void LobbyNetworkHandler_UpdateLobby(Lobby obj)
+    {
+        UpdateLobby();
+    }
+
+    private void UpdateLobby()
+    {
+        UpdateLobby(LobbyNetworkHandler.Instance.GetJoinedLobby());
+    }
+
+    private void UpdateLobby(Lobby lobby)
+    {
+        ClearLobby();
+        playerInstanceTemplate.gameObject.SetActive(true);
+        foreach (Player player in lobby.Players) {
+            Transform playerSingleTransform = Instantiate(playerInstanceTemplate, container);
+            playerSingleTransform.gameObject.SetActive(true);
+
+            LobbyPlayerUI playerUI = playerSingleTransform.GetComponentInChildren<LobbyPlayerUI>();
+
+            playerUI.SetKickPlayerButtonVisible(
+                    LobbyNetworkHandler.Instance.IsLobbyHost() &&
+                    player.Id != AuthenticationService.Instance.PlayerId
+                );
+
+            playerUI.UpdatePlayer(player);
+        }
+
+        lobbyName.text = lobby.Name;
+        playerCount.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
+        lobbyCode.text = lobby.LobbyCode;
+
+        joinedLobbyPanel.SetActive(true);
+
+    }
+
+    private void LobbyNetworkHandler_OnKickedFromLobby(Lobby obj)
+    {
+        LobbyNetworkHandler_OnLeftLobby();
+    }
+    private void LobbyNetworkHandler_OnLeftLobby()
+    {
+        ClearLobby();
+
+        Hide();
+    }
+
+    private void ClearLobby()
+    {
+        foreach (Transform child in container)
+        {
+            if (child == playerInstanceTemplate) continue;
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void Hide()
+    {
+        joinedLobbyPanel.gameObject.SetActive(false);
+        lobbyListPanel.gameObject.SetActive(true);
+    }
+
 }

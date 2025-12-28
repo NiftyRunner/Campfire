@@ -153,6 +153,15 @@ public class LobbyNetworkHandler : MonoBehaviour
         }
     }
 
+    public async void JoinLobby(Lobby _lobby)
+    {
+        Player player = GetPlayer();
+
+        joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(_lobby.Id, new JoinLobbyByIdOptions { Player = player} );
+        
+        OnJoinedLobby?.Invoke(_lobby);
+    }
+
     public async void LeaveLobby()
     {
         if (joinedLobby != null)

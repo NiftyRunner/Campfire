@@ -29,14 +29,15 @@ public class LobbyListManager : MonoBehaviour
         LobbyNetworkHandler.OnLobbyListUpdate += LobbyNetworkHandler_OnLobbyListUpdate;
         LobbyNetworkHandler.OnKickedFromLobby += LobbyNetworkHandler_OnKickedFromLobby;
         LobbyNetworkHandler.OnLeftLobby += LobbyNetworkHandler_OnLeftLobby;
+        LobbyNetworkHandler.OnJoinedLobby += LobbyNetworkHandler_OnJoinedLobby;
     }
-
 
     private void OnDisable()
     {
         LobbyNetworkHandler.OnLobbyListUpdate -= LobbyNetworkHandler_OnLobbyListUpdate;
         LobbyNetworkHandler.OnKickedFromLobby -= LobbyNetworkHandler_OnKickedFromLobby;
         LobbyNetworkHandler.OnLeftLobby -= LobbyNetworkHandler_OnLeftLobby;
+        LobbyNetworkHandler.OnJoinedLobby -= LobbyNetworkHandler_OnJoinedLobby;
     }
 
     private void Start()
@@ -60,6 +61,11 @@ public class LobbyListManager : MonoBehaviour
     private void LobbyNetworkHandler_OnKickedFromLobby(Lobby obj)
     {
         Show();
+    }
+
+    private void LobbyNetworkHandler_OnJoinedLobby(Lobby obj)
+    {
+        gameObject.SetActive(true);
     }
 
     private void LobbyNetworkHandler_OnLobbyListUpdate(List<Lobby> _lobbyList)

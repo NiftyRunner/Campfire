@@ -21,11 +21,15 @@ public class LobbyNetworkHandler : MonoBehaviour
     public static event Action<Lobby> OnKickedFromLobby;
     public static event Action OnLeftLobby;
 
+    public static event Action<List<Lobby>> OnLobbyListUpdate;
+
     private string playerName = "";
     private float heartbeatTimer;
     private float lobbyPollTimer;
     private float refreshLobbyListTimer = 5f;
     private Lobby joinedLobby;
+
+    private List<Lobby> lobbyList;
 
     private void Awake()
     {
@@ -125,6 +129,27 @@ public class LobbyNetworkHandler : MonoBehaviour
                     joinedLobby = null;
                 }
             }
+        }
+    }
+
+
+    public async void RefreshLobbyList()
+    {
+        try
+        {
+            QueryLobbiesOptions options = new QueryLobbiesOptions();
+
+            options.Count = 25;
+
+            QueryResponse lobbyListQueryResponse = await LobbyService.Instance.QueryLobbiesAsync();
+
+            lobbyList = lobbyListQueryResponse.Results;
+
+            OnLobbyListUpdate?.Invoke(lobbyList);
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
         }
     }
 

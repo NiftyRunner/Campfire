@@ -216,10 +216,12 @@ public class LobbyManager : MonoBehaviour {
                     field: QueryOrder.FieldOptions.Created)
             };
 
-            //Check errors in these lines later
-            //QueryResponse lobbyListQueryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+           
 
-            //OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs { lobbyList = lobbyListQueryResponse.Results });
+            //Check errors in these lines later
+            QueryResponse lobbyListQueryResponse = await LobbyService.Instance.QueryLobbiesAsync();
+
+            OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs { lobbyList = lobbyListQueryResponse.Results });
         } catch (LobbyServiceException e) {
             Debug.Log(e);
         }

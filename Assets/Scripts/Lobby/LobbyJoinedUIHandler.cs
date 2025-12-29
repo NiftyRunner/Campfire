@@ -59,6 +59,7 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
     private void Start()
     {
+        
         ClearLobby();
     }
 
@@ -82,9 +83,13 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
             LobbyPlayerUI playerUI = playerSingleTransform.GetComponentInChildren<LobbyPlayerUI>();
 
+            bool isHostOnly = LobbyNetworkHandler.Instance.IsLobbyHost() &&
+                    player.Id != AuthenticationService.Instance.PlayerId;
+
+            startGameButton.gameObject.SetActive(LobbyNetworkHandler.Instance.IsLobbyHost());
+
             playerUI.SetKickPlayerButtonVisible(
-                    LobbyNetworkHandler.Instance.IsLobbyHost() &&
-                    player.Id != AuthenticationService.Instance.PlayerId
+                    isHostOnly
                 );
 
             playerUI.UpdatePlayer(player);

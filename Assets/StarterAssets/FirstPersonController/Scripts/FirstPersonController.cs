@@ -109,7 +109,14 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
-		}
+
+            if (!IsOwner)
+            {
+
+                CinemachineCameraTarget.SetActive(false);
+                return;
+            }
+        }
 
 		private void Update()
 		{
@@ -126,7 +133,32 @@ namespace StarterAssets
             CameraRotation();
 		}
 
-		private void GroundedCheck()
+        public override void OnNetworkSpawn()
+        {
+            if (!IsOwner)
+            {
+                // Disable input
+#if ENABLE_INPUT_SYSTEM
+                var playerInput = GetComponent<PlayerInput>();
+                if (playerInput != null)
+                    playerInput.enabled = false;
+#endif
+
+                // Disable movement controller
+                var controller = GetComponent<CharacterController>();
+                if (controller != null)
+                    controller.enabled = false;
+
+                // Disable camera
+                if (CinemachineCameraTarget != null)
+                    CinemachineCameraTarget.SetActive(false);
+
+                enabled = false; // disables Update / LateUpdate
+                return;
+            }
+        }
+
+        private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);

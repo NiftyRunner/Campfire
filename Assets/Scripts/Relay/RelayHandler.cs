@@ -34,4 +34,21 @@ public class RelayHandler : MonoBehaviour
         }
     }
 
+    public async void JoinRelay(string joinCode)
+    {
+        try
+        {
+            Debug.Log("joining with log: " + joinCode);
+
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(joinAllocation, "dtls"));
+
+            NetworkManager.Singleton.StartClient();
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
 }

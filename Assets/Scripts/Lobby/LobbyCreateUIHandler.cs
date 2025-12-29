@@ -13,13 +13,8 @@ public class LobbyCreateUIHandler : MonoBehaviour
     private bool isPrivate = false;
     int maxPlayers = 4;
 
-    private GameObject createLobbyPanel;
-    private GameObject joinLobbyPanel;
-
     private void Start()
     {
-        createLobbyPanel = LobbyPanelRelationHandler.Instance.GetCreateLobbyPanel();
-        joinLobbyPanel = LobbyPanelRelationHandler.Instance.GetLobbyJoinedPanel();
 
         createLobbyButton.onClick.AddListener(() =>
         {
@@ -30,18 +25,16 @@ public class LobbyCreateUIHandler : MonoBehaviour
                 return;
             }
 
-            createLobbyPanel.SetActive(false);
-            joinLobbyPanel.SetActive(true);
+            LobbyPanelRelationHandler.Instance.SetCreateLobbyPanel(false);
+            LobbyPanelRelationHandler.Instance.SetLobbyJoinedPanel(true);
+
             LobbyNetworkHandler.Instance.CreateLobby(lobbyName, maxPlayers, isPrivate);
         });
 
         goToLobbyListButon.onClick.AddListener(() => 
         {
-            GameObject lobbyListPanel = LobbyPanelRelationHandler.Instance.GetLobbyPanel();
-            
-
-            lobbyListPanel.SetActive(true);
-            createLobbyPanel.SetActive(false); //Set CreateLobbyPanelOff
+            LobbyPanelRelationHandler.Instance.SetLobbyPanel(true);
+            LobbyPanelRelationHandler.Instance.SetCreateLobbyPanel(false); //Set CreateLobbyPanelOff
         });
     }
 

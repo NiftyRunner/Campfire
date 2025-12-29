@@ -12,16 +12,13 @@ public class LobbyItemSingleUI : MonoBehaviour
 
     private Lobby lobby;
 
-    private GameObject lobbyJoinedPanel;
-
     private void Start()
     {
-        lobbyJoinedPanel = LobbyPanelRelationHandler.Instance.GetLobbyJoinedPanel();
 
         GetComponent<Button>().onClick.AddListener(() =>
         {
-             LobbyNetworkHandler.Instance.JoinLobby(lobby);
-            lobbyJoinedPanel.SetActive(true);
+            LobbyNetworkHandler.Instance.JoinLobby(lobby);
+            LobbyPanelRelationHandler.Instance.SetLobbyJoinedPanel(true);
         });
     }
 

@@ -20,6 +20,8 @@ public class LobbyNetworkHandler : MonoBehaviour
     public static event Action<Lobby> OnJoinedLobbyUpdate;
     public static event Action<Lobby> OnKickedFromLobby;
     public static event Action OnLeftLobby;
+    public static event Action OnLobbyJoinFail;
+
 
     public static event Action<List<Lobby>> OnLobbyListUpdate;
 
@@ -141,7 +143,13 @@ public class LobbyNetworkHandler : MonoBehaviour
 
             options.Count = 25;
 
-            QueryResponse lobbyListQueryResponse = await LobbyService.Instance.QueryLobbiesAsync();
+            options.Filters = new List<QueryFilter> {new QueryFilter(
+                    field: QueryFilter.FieldOptions.IsLocked,
+                    op: QueryFilter.OpOptions.EQ,
+                    value: "0"
+                ) };
+
+            QueryResponse lobbyListQueryResponse = await LobbyService.Instance.QueryLobbiesAsync(options);
 
             lobbyList = lobbyListQueryResponse.Results;
 
@@ -160,6 +168,24 @@ public class LobbyNetworkHandler : MonoBehaviour
         joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(_lobby.Id, new JoinLobbyByIdOptions { Player = player} );
         
         OnJoinedLobby?.Invoke(_lobby);
+    }
+
+    public async void JoinLobbyWithCode(string lobbyCode)
+    {
+        try
+        {
+            Player player = GetPlayer();
+
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, new JoinLobbyByCodeOptions { Player = player });
+
+            joinedLobby = lobby;
+
+            OnJoinedLobby?.Invoke(lobby);
+        }
+        catch (LobbyServiceException ex) {
+            Debug.Log(ex);
+            OnLobbyJoinFail?.Invoke();
+        }
     }
 
     public async void LeaveLobby()

@@ -16,9 +16,6 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
     [SerializeField] private Transform playerInstanceTemplate;
 
-    private GameObject joinedLobbyPanel;
-    private GameObject lobbyListPanel;
-
     private void Awake()
     {
         Instance = this;
@@ -52,8 +49,6 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
     private void Start()
     {
-        joinedLobbyPanel = LobbyPanelRelationHandler.Instance.GetLobbyJoinedPanel();
-        lobbyListPanel = LobbyPanelRelationHandler.Instance.GetLobbyPanel();
         ClearLobby();
     }
 
@@ -89,7 +84,7 @@ public class LobbyJoinedUIHandler : MonoBehaviour
         playerCount.text = lobby.Players.Count + "/" + lobby.MaxPlayers;
         lobbyCode.text = lobby.LobbyCode;
 
-        joinedLobbyPanel.SetActive(true);
+        LobbyPanelRelationHandler.Instance.SetLobbyJoinedPanel(true);
 
     }
 
@@ -115,8 +110,8 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
     private void Hide()
     {
-        joinedLobbyPanel.gameObject.SetActive(false);
-        lobbyListPanel.gameObject.SetActive(true);
+        LobbyPanelRelationHandler.Instance.SetLobbyJoinedPanel(false); //Setting lobby joined panel off
+        LobbyPanelRelationHandler.Instance.SetLobbyPanel(true); //Setting lobby list panel on
     }
 
 }

@@ -9,14 +9,17 @@ public class LobbyPanelRelationHandler : MonoBehaviour
     [SerializeField] private GameObject lobbyPanel;
     [SerializeField] private GameObject lobbyJoinedPanel;
     [SerializeField] private GameObject createLobbyPanel;
+    [SerializeField] private GameObject findLobbyPanel;
 
-    public GameObject GetMenuPanel() => menuPanel;
+    public void SetMenuPanel(bool state) => menuPanel.SetActive(state);
 
-    public GameObject GetLobbyPanel() => lobbyPanel;
+    public void SetLobbyPanel(bool state) => lobbyPanel.SetActive(state);
 
-    public GameObject GetLobbyJoinedPanel() => lobbyJoinedPanel;
+    public void SetLobbyJoinedPanel(bool state) => lobbyJoinedPanel.SetActive(state);
 
-    public GameObject GetCreateLobbyPanel() => createLobbyPanel;
+    public void SetCreateLobbyPanel(bool state) => createLobbyPanel.SetActive(state);
+
+    public void SetFindLobbyPanel(bool state) => findLobbyPanel.SetActive(state);
 
     private void Awake()
     {
@@ -29,5 +32,6 @@ public class LobbyPanelRelationHandler : MonoBehaviour
         lobbyPanel.SetActive(false);
         lobbyJoinedPanel.SetActive(false);
         createLobbyPanel.SetActive(false);
+        findLobbyPanel.SetActive(false);
     }
 }

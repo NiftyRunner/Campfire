@@ -4,23 +4,11 @@ using UnityEngine.UI;
 
 public class TitleScreenManager : MonoBehaviour
 {
-    [Header("Connector Reference")]
-    [SerializeField] private LobbyPanelRelationHandler relationHandler;
-
     [Header("Button References")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button OptionsButton;
     [SerializeField] private Button QuitButton;
     [SerializeField] private TMP_InputField playerName;
-
-    private GameObject menuPanel;
-    private GameObject lobbyPanel;
-
-    private void Awake()
-    {
-        menuPanel = relationHandler.GetMenuPanel();
-        lobbyPanel = relationHandler.GetLobbyPanel();
-    }
 
     private void Start()
     {
@@ -34,8 +22,10 @@ public class TitleScreenManager : MonoBehaviour
             }
 
             LobbyNetworkHandler.Instance.Authenticate(playerName.text);
-            menuPanel.SetActive(false);
-            lobbyPanel.SetActive(true);
+
+            LobbyPanelRelationHandler.Instance.SetMenuPanel(false); //Setting title screen off
+            LobbyPanelRelationHandler.Instance.SetLobbyPanel(true); //Setting lobby list on
+
         });
 
         OptionsButton.onClick.AddListener(() => {

@@ -8,16 +8,12 @@ public class LobbyListManager : MonoBehaviour
     [Header("Header Button References")]
     [SerializeField] private Button createLobbyPanelButton;
     [SerializeField] private Button refreshLobbyListButton;
+    [SerializeField] private Button findLobbyByCodeButton;
     [SerializeField] private Button goToTitleScreenButton;
 
     [Space]
     [SerializeField] private Transform listItemTemplate;
     [SerializeField] private Transform container;
-
-    private GameObject titleScreenPanel;
-    private GameObject lobbyListScreenPanel;
-    private GameObject lobbyCreatePanel;
-
 
     private void Awake()
     {
@@ -44,9 +40,15 @@ public class LobbyListManager : MonoBehaviour
     {
         SetUpBackButton();
 
+
         refreshLobbyListButton.onClick.AddListener(() =>
         {
             LobbyNetworkHandler.Instance.RefreshLobbyList();
+        });
+
+        findLobbyByCodeButton.onClick.AddListener(() => {
+            LobbyPanelRelationHandler.Instance.SetFindLobbyPanel(true);
+            gameObject.SetActive(false);
         });
 
         EnableCreateLobbyPanel();
@@ -92,23 +94,21 @@ public class LobbyListManager : MonoBehaviour
 
     private void SetUpBackButton()
     {
-        titleScreenPanel = LobbyPanelRelationHandler.Instance.GetMenuPanel();
-        lobbyListScreenPanel = LobbyPanelRelationHandler.Instance.GetLobbyPanel();
 
         goToTitleScreenButton.onClick.AddListener(() =>
         {
-            lobbyListScreenPanel.SetActive(false);
-            titleScreenPanel.SetActive(true);
+            LobbyPanelRelationHandler.Instance.SetLobbyPanel(false);
+            LobbyPanelRelationHandler.Instance.SetMenuPanel(true); //Title screen panel
         });
     }
     private void EnableCreateLobbyPanel()
     {
-        lobbyCreatePanel = LobbyPanelRelationHandler.Instance.GetCreateLobbyPanel();
 
         createLobbyPanelButton.onClick.AddListener(() =>
         {
-            lobbyListScreenPanel.SetActive(false);
-            lobbyCreatePanel.SetActive(true);
+            LobbyPanelRelationHandler.Instance.SetLobbyPanel(false); //Lobby list panel
+            LobbyPanelRelationHandler.Instance.SetCreateLobbyPanel(true); //create lobby panel
+
         });
     }
 

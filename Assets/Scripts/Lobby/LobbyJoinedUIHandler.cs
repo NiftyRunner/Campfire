@@ -8,7 +8,12 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 {
     public static LobbyJoinedUIHandler Instance { get; private set; }
 
+    //Temp variables
+    [SerializeField] GameObject mainCanvas;
+    [SerializeField] GameObject menuCamera;
+
     [SerializeField] private Button leaveLobbyButton;
+    [SerializeField] private Button startGameButton;
     [SerializeField] private TextMeshProUGUI lobbyName;
     [SerializeField] private TextMeshProUGUI playerCount;
     [SerializeField] private TextMeshProUGUI lobbyCode;
@@ -28,6 +33,10 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
         });
 
+        startGameButton.onClick.AddListener(() => {
+            LobbyNetworkHandler.Instance.StartGame();
+        });
+
     }
 
     private void OnEnable()
@@ -36,8 +45,8 @@ public class LobbyJoinedUIHandler : MonoBehaviour
         LobbyNetworkHandler.OnJoinedLobbyUpdate += LobbyNetworkHandler_UpdateLobby;
         LobbyNetworkHandler.OnKickedFromLobby += LobbyNetworkHandler_OnKickedFromLobby;
         LobbyNetworkHandler.OnLeftLobby += LobbyNetworkHandler_OnLeftLobby;
+        LobbyNetworkHandler.OnGameStarted += LobbyNetworkHandler_OnGameStarted;
     }
-
 
     private void OnDisable()
     {
@@ -45,6 +54,7 @@ public class LobbyJoinedUIHandler : MonoBehaviour
         LobbyNetworkHandler.OnJoinedLobbyUpdate -= LobbyNetworkHandler_UpdateLobby;
         LobbyNetworkHandler.OnKickedFromLobby -= LobbyNetworkHandler_OnKickedFromLobby;
         LobbyNetworkHandler.OnLeftLobby -= LobbyNetworkHandler_OnLeftLobby;
+        LobbyNetworkHandler.OnGameStarted -= LobbyNetworkHandler_OnGameStarted;
     }
 
     private void Start()
@@ -97,6 +107,14 @@ public class LobbyJoinedUIHandler : MonoBehaviour
         ClearLobby();
 
         Hide();
+    }
+
+    private void LobbyNetworkHandler_OnGameStarted()
+    {
+        mainCanvas.SetActive(false);
+        menuCamera.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void ClearLobby()

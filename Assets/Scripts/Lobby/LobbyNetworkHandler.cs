@@ -276,6 +276,7 @@ public class LobbyNetworkHandler : MonoBehaviour
                 });
 
                 joinedLobby = lobby;
+
             }
             catch (LobbyServiceException ex) { 
                 Debug.Log(ex);

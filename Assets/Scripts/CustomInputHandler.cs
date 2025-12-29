@@ -1,8 +1,9 @@
 using System;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CustomInputHandler : MonoBehaviour
+public class CustomInputHandler : NetworkBehaviour
 {
     public static event Action<GameObject> OnInteract;
 
@@ -43,6 +44,8 @@ public class CustomInputHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, interactionDistance, hitLayer)) //Raycasting to hit layer
         {
@@ -69,7 +72,7 @@ public class CustomInputHandler : MonoBehaviour
             interactText.text = "";
         }
 
-        Debug.DrawRay(transform.position, transform.forward * interactionDistance, Color.red);
+        //Debug.DrawRay(transform.position, transform.forward * interactionDistance, Color.red);
     }
 
     //Performing the interact action

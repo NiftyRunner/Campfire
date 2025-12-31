@@ -39,6 +39,7 @@ public class LobbyNetworkHandler : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(Instance);
     }
 
     private void Update()

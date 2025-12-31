@@ -3,10 +3,13 @@ using UnityEngine;
 using UnityEngine.UI; 
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Authentication;
+using System;
 
 public class LobbyJoinedUIHandler : MonoBehaviour
 {
     public static LobbyJoinedUIHandler Instance { get; private set; }
+
+    public static event Action OnStartButtonPressed;
 
     //Temp variables
     [SerializeField] GameObject mainCanvas;
@@ -35,6 +38,7 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
         startGameButton.onClick.AddListener(() => {
             LobbyNetworkHandler.Instance.StartGame();
+            OnStartButtonPressed?.Invoke();
         });
 
     }
@@ -116,10 +120,10 @@ public class LobbyJoinedUIHandler : MonoBehaviour
 
     private void LobbyNetworkHandler_OnGameStarted()
     {
-        mainCanvas.SetActive(false);
-        menuCamera.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //mainCanvas.SetActive(false);
+        //menuCamera.SetActive(false);
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
     private void ClearLobby()

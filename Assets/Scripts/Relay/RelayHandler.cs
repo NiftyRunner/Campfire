@@ -13,6 +13,7 @@ public class RelayHandler : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(Instance);
     }
 
     public async Task<string> CreateRelay()

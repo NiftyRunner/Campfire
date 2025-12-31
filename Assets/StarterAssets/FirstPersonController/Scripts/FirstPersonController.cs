@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using Unity.Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -148,6 +149,10 @@ namespace StarterAssets
                 var controller = GetComponent<CharacterController>();
                 if (controller != null)
                     controller.enabled = false;
+
+				var playerVirtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
+				if(playerVirtualCamera != null)
+					playerVirtualCamera.enabled = false;
 
                 // Disable camera
                 if (CinemachineCameraTarget != null)

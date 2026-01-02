@@ -21,7 +21,10 @@ public class TitleScreenManager : MonoBehaviour
                 return;
             }
 
+            //Add vivox initialize here
+            //Fix player name issue
             LobbyNetworkHandler.Instance.Authenticate(playerName.text);
+            //VivoxHandler.Instance.LoginToVivoxAsync(playerName.text);
 
             LobbyPanelRelationHandler.Instance.SetMenuPanel(false); //Setting title screen off
             LobbyPanelRelationHandler.Instance.SetLobbyPanel(true); //Setting lobby list on

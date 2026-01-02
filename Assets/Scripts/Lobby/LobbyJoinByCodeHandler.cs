@@ -32,6 +32,7 @@ public class LobbyJoinByCodeHandler : MonoBehaviour
 
         joinLobbyButton.onClick.AddListener(() => {
             LobbyNetworkHandler.Instance.JoinLobbyWithCode(lobbyCode.text);
+            VivoxHandler.Instance.JoinVoiceChannel(lobbyCode.text);
         });
     }
 

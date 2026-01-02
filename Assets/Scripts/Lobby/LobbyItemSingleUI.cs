@@ -18,6 +18,7 @@ public class LobbyItemSingleUI : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(() =>
         {
             LobbyNetworkHandler.Instance.JoinLobby(lobby);
+            //VivoxHandler.Instance.JoinVoiceChannel(lobby.LobbyCode);
             LobbyPanelRelationHandler.Instance.SetLobbyJoinedPanel(true);
         });
     }

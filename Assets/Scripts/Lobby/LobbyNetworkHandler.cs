@@ -22,6 +22,7 @@ public class LobbyNetworkHandler : MonoBehaviour
     public static event Action<Lobby> OnKickedFromLobby;
     public static event Action OnLeftLobby;
     public static event Action OnLobbyJoinFail;
+    public static event Action<string> OnPlayerAuthenticated;
 
     public static event Action OnGameStarted;
 
@@ -64,6 +65,8 @@ public class LobbyNetworkHandler : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        OnPlayerAuthenticated?.Invoke(playerName);
     }
 
     public async void CreateLobby(string lobbyName, int maxPlayers, bool isPrivate)

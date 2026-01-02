@@ -14,11 +14,13 @@ public class VivoxHandler : MonoBehaviour
     private void OnEnable()
     {
         LobbyNetworkHandler.OnJoinedLobby += LobbyNetworkHandler_OnJoinedLobby;
+        LobbyNetworkHandler.OnPlayerAuthenticated += LobbyNetworkHandler_OnPlayerAuthenticated;
     }
 
     private void OnDisable()
     {
         LobbyNetworkHandler.OnJoinedLobby -= LobbyNetworkHandler_OnJoinedLobby;
+        LobbyNetworkHandler.OnPlayerAuthenticated -= LobbyNetworkHandler_OnPlayerAuthenticated;
     }
 
 
@@ -46,20 +48,40 @@ public class VivoxHandler : MonoBehaviour
             await VivoxService.Instance.SetActiveOutputDeviceAsync(outputs[0]);
 
         VivoxService.Instance.UnmuteInputDevice();
+
+        Debug.Log(
+                   $"Mic muted: {VivoxService.Instance.IsInputDeviceMuted}"
+                   );
+
+        Debug.Log(
+                $"Active input: {VivoxService.Instance.ActiveInputDevice?.DeviceName}"
+                );
+        Debug.Log(
+                $"Active input: {VivoxService.Instance.ActiveOutputDevice?.DeviceName}"
+                );
     }
 
     public async void JoinVoiceChannel(string _channelName) 
     {
         Channel3DProperties channelProperties = new Channel3DProperties();
-        //channelProperties.AudioFadeIntensityByDistance.Equals(10);
+
+        channelProperties.AudibleDistance.Equals(32f);
+        channelProperties.ConversationalDistance.Equals(10f);
+        channelProperties.AudioFadeIntensityByDistance.Equals(1f);
+
 
         await VivoxService.Instance.JoinPositionalChannelAsync(_channelName, ChatCapability.TextAndAudio, channelProperties);
 
         Debug.Log("Joined lobby channel with channel name: " + _channelName);
     }
 
+    private void LobbyNetworkHandler_OnPlayerAuthenticated(string playerName)
+    {
+        LoginToVivoxAsync(playerName);
+    }
+
     private void LobbyNetworkHandler_OnJoinedLobby(Unity.Services.Lobbies.Models.Lobby lobby)
     {
-        JoinVoiceChannel(lobby.LobbyCode);
+        JoinVoiceChannel(lobby.Id);
     }
 }

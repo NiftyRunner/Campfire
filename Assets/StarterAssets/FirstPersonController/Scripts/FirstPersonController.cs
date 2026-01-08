@@ -1,5 +1,6 @@
 ﻿using Unity.Cinemachine;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -76,7 +77,10 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
-		private bool IsCurrentDeviceMouse
+		private string playerId;
+
+
+        private bool IsCurrentDeviceMouse
 		{
 			get
 			{
@@ -160,6 +164,18 @@ namespace StarterAssets
 
                 enabled = false; // disables Update / LateUpdate
                 return;
+            }
+
+			playerId = AuthenticationService.Instance.PlayerId;
+			PlayerRegistry.gamePlayers[playerId] = this;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!string.IsNullOrEmpty(playerId))
+            {
+                PlayerRegistry.gamePlayers.Remove(playerId);
+                Debug.Log($"Unregistered player {playerId}");
             }
         }
 

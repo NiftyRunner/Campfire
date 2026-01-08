@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Vivox;
@@ -43,8 +43,9 @@ public class VivoxHandler : MonoBehaviour
 
             bool isSpeaking = participant.AudioEnergy > 0.01f;
 
-            if (PlayerRegistry.lobbyPlayers.TryGetValue(participant.PlayerId, out var playerGO)) {
-                playerGO.GetComponent<LobbyPlayerUI>().SetMicIcon(isSpeaking);
+            if (PlayerRegistry.lobbyPlayers.TryGetValue(participant.PlayerId, out var playerGO))
+            {
+                playerGO.SetMicIcon(isSpeaking);
             }
 
             // Example: show mic icon

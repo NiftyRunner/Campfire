@@ -11,6 +11,7 @@ public class LobbyPlayerUI : MonoBehaviour
     [SerializeField] private GameObject micIcon;
 
     private Player player;
+    private string playerId;
 
 
     private void Awake()
@@ -32,15 +33,21 @@ public class LobbyPlayerUI : MonoBehaviour
     {
         this.player = player;
         playerNameText.text = player.Data[LobbyNetworkHandler.KEY_PLAYER_NAME].Value;
+        playerId = player.Id;
+        PlayerRegistry.lobbyPlayers[playerId] = this;
+    }
 
-        PlayerRegistry.lobbyPlayers[player.Id] = this;
+    private void OnDestroy()
+    {
+        if (!string.IsNullOrEmpty(playerId))
+            PlayerRegistry.lobbyPlayers.Remove(playerId);
     }
 
     private void KickPlayer()
     {
         if (player != null)
         {
-            LobbyNetworkHandler.Instance.KickPlayer(player.Id);
+            LobbyNetworkHandler.Instance.KickPlayer(playerId);
         }
     }
 

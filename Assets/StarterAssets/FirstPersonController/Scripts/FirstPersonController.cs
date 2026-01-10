@@ -154,9 +154,24 @@ namespace StarterAssets
                 if (controller != null)
                     controller.enabled = false;
 
+				var playerCamera = GetComponentInChildren<Camera>();
+				if (playerCamera != null)
+					playerCamera.enabled = false;
+
+				var playerCameraBRain = GetComponentInChildren<CinemachineBrain>();
+				//Debug.Log(playerVirtualCamera + "Player id: " + AuthenticationService.Instance.PlayerId);
+				if (playerCameraBRain != null)
+					playerCameraBRain.enabled = false;
+
 				var playerVirtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-				if(playerVirtualCamera != null)
+				if (playerVirtualCamera != null)
 					playerVirtualCamera.enabled = false;
+
+
+
+				var playerCanvas = GetComponentInChildren<Canvas>();
+				if(playerCanvas != null)
+					playerCanvas.enabled = false;
 
                 // Disable camera
                 if (CinemachineCameraTarget != null)

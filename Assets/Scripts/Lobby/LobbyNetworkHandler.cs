@@ -58,9 +58,9 @@ public class LobbyNetworkHandler : MonoBehaviour
 
         await UnityServices.InitializeAsync(initializationOptions);
 
+
         AuthenticationService.Instance.SignedIn += () =>
         {
-
             Debug.Log("Signed in! " + AuthenticationService.Instance.PlayerId);
         };
 
@@ -68,6 +68,7 @@ public class LobbyNetworkHandler : MonoBehaviour
 
         OnPlayerAuthenticated?.Invoke(playerName);
     }
+
 
     public async void CreateLobby(string lobbyName, int maxPlayers, bool isPrivate)
     {

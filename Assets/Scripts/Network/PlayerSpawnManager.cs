@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using StarterAssets;
 
 public class PlayerSpawnManager : NetworkBehaviour
 {
@@ -21,6 +22,7 @@ public class PlayerSpawnManager : NetworkBehaviour
         nextSpawnIndex++;
 
         GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+        //player.GetComponent<FirstPersonController>().OnPlayerSpawn();
 
         player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
     }
